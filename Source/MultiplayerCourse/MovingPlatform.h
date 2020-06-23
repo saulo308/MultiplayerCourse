@@ -25,4 +25,9 @@ protected:
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
 	float MovingSpeed = 100.f;
+	UPROPERTY(EditAnywhere, meta=(MakeEditWidget=true))
+	FVector EndLocation;
+private:
+	FVector GlobalEndLocation;
+	FVector GlobalStartLocation;
 };
