@@ -18,6 +18,9 @@ class MULTIPLAYERCOURSE_API AMovingPlatform : public AStaticMeshActor
 public:
 	AMovingPlatform();
 
+	FORCEINLINE void AddTrigger() { ActiveTriggers++; }
+	FORCEINLINE void RemoveTrigger() { if(ActiveTriggers > 0) ActiveTriggers--; }
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
@@ -27,7 +30,11 @@ public:
 	float MovingSpeed = 100.f;
 	UPROPERTY(EditAnywhere, meta=(MakeEditWidget=true))
 	FVector EndLocation;
+
 private:
 	FVector GlobalEndLocation;
 	FVector GlobalStartLocation;
+
+	UPROPERTY(EditAnywhere)
+	int32 ActiveTriggers = 0;
 };

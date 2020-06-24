@@ -24,7 +24,7 @@ void AMovingPlatform::BeginPlay() {
 void AMovingPlatform::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
 
-	if (HasAuthority()) {
+	if (HasAuthority() && ActiveTriggers > 0) {
 		//Moving platform
 		auto CurrentLocation = GetActorLocation();
 		auto MovementDirection = (GlobalEndLocation - GlobalStartLocation).GetSafeNormal();
