@@ -23,20 +23,31 @@ APlatformTrigger::APlatformTrigger()
 	if (TriggerVolume) {
 		TriggerVolume->SetupAttachment(Root);
 	}
-
 }
 
 // Called when the game starts or when spawned
 void APlatformTrigger::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	//Overlaps
+	if (TriggerVolume) {
+		TriggerVolume->OnComponentBeginOverlap.AddDynamic(this, &APlatformTrigger::OnTriggerBeginOverlap);
+		TriggerVolume->OnComponentEndOverlap.AddDynamic(this, &APlatformTrigger::OnTriggerEndOverlap);
+	}
 }
 
 // Called every frame
 void APlatformTrigger::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
 
+void APlatformTrigger::OnTriggerBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
+	UE_LOG(LogTemp, Warning, TEXT("Activate!"));
+}
+
+void APlatformTrigger::OnTriggerEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {
+	UE_LOG(LogTemp, Warning, TEXT("Deactivate!"));
 }
 
