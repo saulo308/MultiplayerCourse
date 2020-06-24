@@ -16,4 +16,11 @@ class MULTIPLAYERCOURSE_API UPuzzlePlatformGameInstance : public UGameInstance
 
 	UPuzzlePlatformGameInstance();
 	virtual void Init();
+
+	//Exec functions
+	UFUNCTION(Exec)
+	void Host();
+
+	UFUNCTION(Exec)
+	void Join(const FString& Address);
 };
