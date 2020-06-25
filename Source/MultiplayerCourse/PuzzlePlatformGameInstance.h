@@ -14,13 +14,18 @@ class MULTIPLAYERCOURSE_API UPuzzlePlatformGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 
+public:
 	UPuzzlePlatformGameInstance();
 	virtual void Init();
 
 	//Exec functions
 	UFUNCTION(Exec)
 	void Host();
-
 	UFUNCTION(Exec)
 	void Join(const FString& Address);
+	UFUNCTION(Exec,BlueprintCallable)
+	void LoadMenu();
+protected:
+	UPROPERTY()
+	TSubclassOf<UUserWidget> MenuClass;
 };
