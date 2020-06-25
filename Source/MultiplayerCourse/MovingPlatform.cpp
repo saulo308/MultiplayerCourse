@@ -32,7 +32,9 @@ void AMovingPlatform::Tick(float DeltaTime) {
 		SetActorLocation(CurrentLocation);
 
 		//If has reached the end location, swap with start and platform will back to "StartLocation"s
-		if (CurrentLocation.Equals(GlobalEndLocation,2.f)) {
+		float TravelLength = (GlobalEndLocation - GlobalStartLocation).Size();
+		float CurrentTravelLength = (CurrentLocation - GlobalStartLocation).Size();
+		if (CurrentTravelLength >= TravelLength) {
 			auto TempLocation = GlobalStartLocation;
 			GlobalStartLocation = GlobalEndLocation;
 			GlobalEndLocation = TempLocation;

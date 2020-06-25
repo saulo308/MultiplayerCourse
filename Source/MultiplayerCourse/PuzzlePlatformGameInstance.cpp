@@ -14,9 +14,11 @@ void UPuzzlePlatformGameInstance::Init() {
 
 void UPuzzlePlatformGameInstance::Host() {
 	auto Engine = GetEngine();
-	if (!Engine) return;
+	auto World = GetWorld();
+	if (!Engine || !World) return;
 
 	Engine->AddOnScreenDebugMessage(0, 2.f, FColor::Green, TEXT("Host successful!"));
+	World->ServerTravel(TEXT("/Game/ThirdPersonCPP/Maps/ThirdPersonExampleMap?listen"));
 }
 
 void UPuzzlePlatformGameInstance::Join(const FString& Address) {
