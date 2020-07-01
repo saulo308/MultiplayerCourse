@@ -14,6 +14,9 @@ bool UMainMenu::Initialize() {
 
 void UMainMenu::OnHostClicked() {
 	UE_LOG(LogTemp, Warning, TEXT("Host!"));
+	if (MenuInterface) {
+		MenuInterface->HostServer();
+	}
 }
 
 void UMainMenu::OnJoinClicked() {

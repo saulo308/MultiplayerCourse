@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Blueprint/UserWidget.h"
+#include "MenuSystem/MainMenu.h"
 
 UPuzzlePlatformGameInstance::UPuzzlePlatformGameInstance() {
 	static ConstructorHelpers::FClassFinder<UUserWidget> MenuMainClassBP(TEXT("/Game/MenuSystem/WBP_MainMenu"));
@@ -24,9 +25,10 @@ void UPuzzlePlatformGameInstance::LoadMenu() {
 	if (!MenuClass || !PlayerController) return;
 
 	//Creating widget and addingo to viewport
-	auto MenuWidget = CreateWidget<UUserWidget>(this, MenuClass);
+	auto MenuWidget = CreateWidget<UMainMenu>(this, MenuClass);
 	MenuWidget->AddToViewport();
 	MenuWidget->bIsFocusable = true;
+	MenuWidget->SetMenuInterface(this);
 
 	//InputMode
 	FInputModeUIOnly InputModeData;
@@ -52,4 +54,8 @@ void UPuzzlePlatformGameInstance::Join(const FString& Address) {
 
 	Engine->AddOnScreenDebugMessage(0, 2.f, FColor::Green, FString::Printf(TEXT("Joining %s"), *Address));
 	PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
+}
+
+void UPuzzlePlatformGameInstance::HostServer() {
+	Host();
 }
