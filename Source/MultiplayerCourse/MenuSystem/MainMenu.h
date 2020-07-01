@@ -14,6 +14,14 @@ UCLASS()
 class MULTIPLAYERCOURSE_API UMainMenu : public UUserWidget
 {
 	GENERATED_BODY()
+
+protected:
+	virtual bool Initialize() override;
+	UFUNCTION()
+	void OnHostClicked();
+	UFUNCTION()
+	void OnJoinClicked();
+
 public:
 	UPROPERTY(BlueprintReadWrite, meta=(BindWidget))
 	UButton* BtnHost;
