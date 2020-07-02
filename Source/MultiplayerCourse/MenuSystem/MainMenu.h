@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Button.h"
+#include "Components/WidgetSwitcher.h"
 #include "MenuInterface.h"
 #include "MainMenu.generated.h"
 
@@ -24,15 +25,31 @@ public:
 protected:
 	virtual bool Initialize() override;
 	UFUNCTION()
-	void OnHostClicked();
+	void HostServer();
 	UFUNCTION()
-	void OnJoinClicked();
+	void JoinServer();
+	UFUNCTION()
+	void OpenJoinMenu();
+	UFUNCTION()
+	void OpenMainMenu();
 
 public:
 	UPROPERTY(BlueprintReadWrite, meta=(BindWidget))
 	UButton* BtnHost;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	UButton* BtnJoinMenu;
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	UButton* BtnJoin;
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	UButton* BtnBackMenu;
+
+	//Menus
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	UWidgetSwitcher* MenuSwitcher;
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	class UWidget* MainMenu;
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	class UWidget* JoinMenu;
 private:
 	IMenuInterface* MenuInterface = nullptr;
 };

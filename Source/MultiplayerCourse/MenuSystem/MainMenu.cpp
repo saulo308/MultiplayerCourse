@@ -6,9 +6,10 @@
 bool UMainMenu::Initialize() {
 	if (!Super::Initialize()) return false;
 
-	if (!BtnHost || !BtnJoin) return false;
-	BtnHost->OnClicked.AddDynamic(this, &UMainMenu::OnHostClicked);
-	BtnJoin->OnClicked.AddDynamic(this, &UMainMenu::OnJoinClicked);
+	if (!BtnHost || !BtnJoin || !BtnBackMenu) return false;
+	BtnHost->OnClicked.AddDynamic(this, &UMainMenu::HostServer);
+	BtnJoinMenu->OnClicked.AddDynamic(this, &UMainMenu::OpenJoinMenu);
+	BtnBackMenu->OnClicked.AddDynamic(this, &UMainMenu::OpenMainMenu);
 	return true;
 }
 
@@ -41,13 +42,22 @@ void UMainMenu::OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld){
 	bIsFocusable = false;
 }
 
-void UMainMenu::OnHostClicked() {
-	UE_LOG(LogTemp, Warning, TEXT("Host!"));
+void UMainMenu::HostServer() {
 	if (MenuInterface) {
 		MenuInterface->HostServer();
 	}
 }
 
-void UMainMenu::OnJoinClicked() {
-	UE_LOG(LogTemp, Warning, TEXT("Join!"));
+void UMainMenu::OpenJoinMenu() {
+	if (!MenuSwitcher || !JoinMenu) return;
+	MenuSwitcher->SetActiveWidget(JoinMenu);
+}
+
+void UMainMenu::OpenMainMenu() {
+	if (!MenuSwitcher || !MainMenu) return;
+	MenuSwitcher->SetActiveWidget(MainMenu);
+}
+
+void UMainMenu::JoinServer() {
+
 }
