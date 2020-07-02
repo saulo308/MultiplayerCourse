@@ -17,7 +17,6 @@ class MULTIPLAYERCOURSE_API UPuzzlePlatformGameInstance : public UGameInstance, 
 
 public:
 	UPuzzlePlatformGameInstance();
-	virtual void Init();
 
 	//Exec functions
 	UFUNCTION(Exec)

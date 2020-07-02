@@ -12,6 +12,35 @@ bool UMainMenu::Initialize() {
 	return true;
 }
 
+void UMainMenu::Setup() {
+	auto PlayerController = GetWorld()->GetFirstPlayerController();
+	if (!PlayerController) return;
+
+	//Adding to viewport
+	AddToViewport();
+	bIsFocusable = true;
+
+	//InputMode
+	FInputModeUIOnly InputModeData;
+	InputModeData.SetWidgetToFocus(TakeWidget());
+	InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+	PlayerController->SetInputMode(InputModeData);
+	PlayerController->bShowMouseCursor = true;
+}
+
+void UMainMenu::OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld){
+	auto PlayerController = GetWorld()->GetFirstPlayerController();
+	if (!PlayerController) return;
+
+	//InputMode
+	PlayerController->bShowMouseCursor = false;
+	PlayerController->SetInputMode(FInputModeGameOnly());
+
+	//Removing from viewport
+	RemoveFromParent();
+	bIsFocusable = false;
+}
+
 void UMainMenu::OnHostClicked() {
 	UE_LOG(LogTemp, Warning, TEXT("Host!"));
 	if (MenuInterface) {

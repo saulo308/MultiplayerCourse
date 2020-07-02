@@ -18,6 +18,8 @@ class MULTIPLAYERCOURSE_API UMainMenu : public UUserWidget
 
 public:
 	FORCEINLINE void SetMenuInterface(IMenuInterface* InterfaceToSet) { MenuInterface = InterfaceToSet; }
+	void Setup();
+	virtual void OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld) override;
 
 protected:
 	virtual bool Initialize() override;
