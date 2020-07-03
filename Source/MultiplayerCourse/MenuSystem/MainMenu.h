@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Components/Button.h"
 #include "Components/WidgetSwitcher.h"
+#include "Components/EditableTextBox.h"
 #include "MenuInterface.h"
 #include "MainMenu.generated.h"
 
@@ -50,6 +51,10 @@ public:
 	class UWidget* MainMenu;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UWidget* JoinMenu;
+
+	//IPField
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	UEditableTextBox* IPAddressField;
 private:
 	IMenuInterface* MenuInterface = nullptr;
 };

@@ -6,10 +6,11 @@
 bool UMainMenu::Initialize() {
 	if (!Super::Initialize()) return false;
 
-	if (!BtnHost || !BtnJoin || !BtnBackMenu) return false;
+	if (!BtnHost || !BtnJoinMenu || !BtnBackMenu || !BtnJoin) return false;
 	BtnHost->OnClicked.AddDynamic(this, &UMainMenu::HostServer);
 	BtnJoinMenu->OnClicked.AddDynamic(this, &UMainMenu::OpenJoinMenu);
 	BtnBackMenu->OnClicked.AddDynamic(this, &UMainMenu::OpenMainMenu);
+	BtnJoin->OnClicked.AddDynamic(this, &UMainMenu::JoinServer);
 	return true;
 }
 
@@ -59,5 +60,8 @@ void UMainMenu::OpenMainMenu() {
 }
 
 void UMainMenu::JoinServer() {
-
+	auto IPAddress = IPAddressField->GetText();
+	if (MenuInterface) {
+		MenuInterface->JoinServer(IPAddress.ToString());
+	}
 }

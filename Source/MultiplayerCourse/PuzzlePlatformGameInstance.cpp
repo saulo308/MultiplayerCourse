@@ -26,7 +26,7 @@ void UPuzzlePlatformGameInstance::LoadMenu() {
 	MenuWidget->Setup();
 }
 
-void UPuzzlePlatformGameInstance::Host() {
+void UPuzzlePlatformGameInstance::HostServer() {
 	auto Engine = GetEngine();
 	auto World = GetWorld();
 	if (!Engine || !World) return;
@@ -35,15 +35,11 @@ void UPuzzlePlatformGameInstance::Host() {
 	World->ServerTravel(TEXT("/Game/ThirdPersonCPP/Maps/ThirdPersonExampleMap?listen"));
 }
 
-void UPuzzlePlatformGameInstance::Join(const FString& Address) {
+void UPuzzlePlatformGameInstance::JoinServer(const FString& Address) {
 	auto Engine = GetEngine();
 	auto PlayerController = GetFirstLocalPlayerController();
 	if (!Engine) return;
 
 	Engine->AddOnScreenDebugMessage(0, 2.f, FColor::Green, FString::Printf(TEXT("Joining %s"), *Address));
 	PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
-}
-
-void UPuzzlePlatformGameInstance::HostServer() {
-	Host();
 }

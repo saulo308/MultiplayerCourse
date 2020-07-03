@@ -19,15 +19,13 @@ public:
 	UPuzzlePlatformGameInstance();
 
 	//Exec functions
-	UFUNCTION(Exec)
-	void Host();
-	UFUNCTION(Exec)
-	void Join(const FString& Address);
 	UFUNCTION(Exec,BlueprintCallable)
 	void LoadMenu();
 
-	UFUNCTION()
+	UFUNCTION(Exec)
 	virtual void HostServer() override;
+	UFUNCTION(Exec)
+	virtual void JoinServer(const FString& Address) override;
 protected:
 	UPROPERTY()
 	TSubclassOf<UUserWidget> MenuClass;
