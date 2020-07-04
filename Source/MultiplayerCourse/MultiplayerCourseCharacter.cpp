@@ -7,6 +7,7 @@
 #include "Components/InputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
+#include "PuzzlePlatformGameInstance.h"
 #include "GameFramework/SpringArmComponent.h"
 
 //////////////////////////////////////////////////////////////////////////
@@ -74,8 +75,10 @@ void AMultiplayerCourseCharacter::SetupPlayerInputComponent(class UInputComponen
 
 	// VR headset functionality
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AMultiplayerCourseCharacter::OnResetVR);
-}
 
+	//GameMenu
+	PlayerInputComponent->BindAction("OpenMenu", IE_Pressed, this, &AMultiplayerCourseCharacter::LoadGameMenu);
+}
 
 void AMultiplayerCourseCharacter::OnResetVR()
 {
@@ -131,4 +134,11 @@ void AMultiplayerCourseCharacter::MoveRight(float Value)
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
 	}
+}
+
+void AMultiplayerCourseCharacter::LoadGameMenu() {
+	auto GameInstance = Cast<UPuzzlePlatformGameInstance>(GetWorld()->GetGameInstance());
+	if (!GameInstance) return;
+
+	GameInstance->LoadGameMenu();
 }

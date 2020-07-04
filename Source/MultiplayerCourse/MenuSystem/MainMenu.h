@@ -3,28 +3,24 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
+#include "MenuBase.h"
 #include "Components/Button.h"
 #include "Components/WidgetSwitcher.h"
 #include "Components/EditableTextBox.h"
-#include "MenuInterface.h"
 #include "MainMenu.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class MULTIPLAYERCOURSE_API UMainMenu : public UUserWidget
+class MULTIPLAYERCOURSE_API UMainMenu : public UMenuBase
 {
 	GENERATED_BODY()
 
-public:
-	FORCEINLINE void SetMenuInterface(IMenuInterface* InterfaceToSet) { MenuInterface = InterfaceToSet; }
-	void Setup();
-	virtual void OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld) override;
-
 protected:
 	virtual bool Initialize() override;
+	virtual void OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld) override;
+
 	UFUNCTION()
 	void HostServer();
 	UFUNCTION()
@@ -55,6 +51,4 @@ public:
 	//IPField
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	UEditableTextBox* IPAddressField;
-private:
-	IMenuInterface* MenuInterface = nullptr;
 };

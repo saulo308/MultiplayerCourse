@@ -21,12 +21,18 @@ public:
 	//Exec functions
 	UFUNCTION(Exec,BlueprintCallable)
 	void LoadMenu();
+	UFUNCTION(Exec)
+	void LoadGameMenu();
 
 	UFUNCTION(Exec)
 	virtual void HostServer() override;
 	UFUNCTION(Exec)
 	virtual void JoinServer(const FString& Address) override;
+	UFUNCTION(Exec)
+	virtual void BackToMainMenu() override;
 protected:
 	UPROPERTY()
 	TSubclassOf<UUserWidget> MenuClass;
+	UPROPERTY()
+	TSubclassOf<UUserWidget> GameMenuClass;
 };

@@ -14,38 +14,20 @@ bool UMainMenu::Initialize() {
 	return true;
 }
 
-void UMainMenu::Setup() {
-	auto PlayerController = GetWorld()->GetFirstPlayerController();
-	if (!PlayerController) return;
-
-	//Adding to viewport
-	AddToViewport();
-	bIsFocusable = true;
-
-	//InputMode
-	FInputModeUIOnly InputModeData;
-	InputModeData.SetWidgetToFocus(TakeWidget());
-	InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
-	PlayerController->SetInputMode(InputModeData);
-	PlayerController->bShowMouseCursor = true;
-}
-
 void UMainMenu::OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld){
-	auto PlayerController = GetWorld()->GetFirstPlayerController();
-	if (!PlayerController) return;
-
-	//InputMode
-	PlayerController->bShowMouseCursor = false;
-	PlayerController->SetInputMode(FInputModeGameOnly());
-
-	//Removing from viewport
-	RemoveFromParent();
-	bIsFocusable = false;
+	RemoveWidget();
 }
 
 void UMainMenu::HostServer() {
 	if (MenuInterface) {
 		MenuInterface->HostServer();
+	}
+}
+
+void UMainMenu::JoinServer() {
+	auto IPAddress = IPAddressField->GetText();
+	if (MenuInterface) {
+		MenuInterface->JoinServer(IPAddress.ToString());
 	}
 }
 
@@ -57,11 +39,4 @@ void UMainMenu::OpenJoinMenu() {
 void UMainMenu::OpenMainMenu() {
 	if (!MenuSwitcher || !MainMenu) return;
 	MenuSwitcher->SetActiveWidget(MainMenu);
-}
-
-void UMainMenu::JoinServer() {
-	auto IPAddress = IPAddressField->GetText();
-	if (MenuInterface) {
-		MenuInterface->JoinServer(IPAddress.ToString());
-	}
 }

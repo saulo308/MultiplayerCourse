@@ -24,4 +24,5 @@ class MULTIPLAYERCOURSE_API IMenuInterface
 public:
 	virtual void HostServer() = 0;
 	virtual void JoinServer(const FString& Address) = 0;
+	virtual void BackToMainMenu() = 0;
 };
