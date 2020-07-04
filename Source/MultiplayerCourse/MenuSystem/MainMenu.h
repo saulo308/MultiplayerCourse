@@ -29,6 +29,8 @@ protected:
 	void OpenJoinMenu();
 	UFUNCTION()
 	void OpenMainMenu();
+	UFUNCTION()
+	void QuitGame();
 
 public:
 	UPROPERTY(BlueprintReadWrite, meta=(BindWidget))
@@ -39,6 +41,8 @@ public:
 	UButton* BtnJoin;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	UButton* BtnBackMenu;
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	UButton* BtnQuitGame;
 
 	//Menus
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
