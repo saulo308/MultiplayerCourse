@@ -7,6 +7,7 @@
 #include "UObject/ConstructorHelpers.h"
 #include "Blueprint/UserWidget.h"
 #include "MenuSystem/MenuBase.h"
+#include "OnlineSubsystem.h"
 
 UPuzzlePlatformGameInstance::UPuzzlePlatformGameInstance() {
 	static ConstructorHelpers::FClassFinder<UUserWidget> MenuMainClassBP(TEXT("/Game/MenuSystem/WBP_MainMenu"));
@@ -16,6 +17,19 @@ UPuzzlePlatformGameInstance::UPuzzlePlatformGameInstance() {
 	static ConstructorHelpers::FClassFinder<UUserWidget> GameMenuClassBP(TEXT("/Game/MenuSystem/WBP_GameMenu"));
 	if (GameMenuClassBP.Class) 
 		GameMenuClass = GameMenuClassBP.Class;
+}
+
+void UPuzzlePlatformGameInstance::Init() {
+	Super::Init();
+
+	//OnlineSubsystem Interface
+	auto OSSInterface = IOnlineSubsystem::Get();
+	if (!OSSInterface) return;
+
+	auto SessionInterface = OSSInterface->GetSessionInterface();
+	if (!SessionInterface.IsValid()) return;
+
+	UE_LOG(LogTemp, Warning, TEXT("Interface name:%s and found Session Interface"), *OSSInterface->GetSubsystemName().ToString());
 }
 
 void UPuzzlePlatformGameInstance::LoadMenu() {

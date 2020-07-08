@@ -17,6 +17,7 @@ class MULTIPLAYERCOURSE_API UPuzzlePlatformGameInstance : public UGameInstance, 
 
 public:
 	UPuzzlePlatformGameInstance();
+	virtual void Init() override;
 
 	//Exec functions
 	UFUNCTION(Exec,BlueprintCallable)
