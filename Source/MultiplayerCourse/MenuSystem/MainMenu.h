@@ -7,6 +7,8 @@
 #include "Components/Button.h"
 #include "Components/WidgetSwitcher.h"
 #include "Components/EditableTextBox.h"
+#include "Components/ScrollBox.h"
+#include "SessionEntry.h"
 #include "MainMenu.generated.h"
 
 /**
@@ -31,6 +33,7 @@ protected:
 	void OpenMainMenu();
 	UFUNCTION()
 	void QuitGame();
+	void AddSession(const FString& SessionName);
 
 public:
 	UPROPERTY(BlueprintReadWrite, meta=(BindWidget))
@@ -54,5 +57,9 @@ public:
 
 	//IPField
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
-	UEditableTextBox* IPAddressField;
+	UScrollBox* SessionList;
+
+	//SessionEntry
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TSubclassOf<USessionEntry> SessionEntryClass;
 };

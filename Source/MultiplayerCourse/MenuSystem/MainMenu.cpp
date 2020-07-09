@@ -13,6 +13,15 @@ bool UMainMenu::Initialize() {
 	BtnBackMenu->OnClicked.AddDynamic(this, &UMainMenu::OpenMainMenu);
 	BtnJoin->OnClicked.AddDynamic(this, &UMainMenu::JoinServer);
 	BtnQuitGame->OnClicked.AddDynamic(this, &UMainMenu::QuitGame);
+
+	AddSession("Saulo");
+	AddSession("Edemais");
+	AddSession("EUAMO");
+	AddSession("VOCE");
+	AddSession("Edemais");
+	AddSession("EUAMO");
+	AddSession("VOCE");
+
 	return true;
 }
 
@@ -27,9 +36,9 @@ void UMainMenu::HostServer() {
 }
 
 void UMainMenu::JoinServer() {
-	auto IPAddress = IPAddressField->GetText();
+	//auto IPAddress = IPAddressField->GetText();
 	if (MenuInterface) {
-		MenuInterface->JoinServer(IPAddress.ToString());
+		//MenuInterface->JoinServer(IPAddress.ToString());
 	}
 }
 
@@ -46,4 +55,15 @@ void UMainMenu::OpenMainMenu() {
 void UMainMenu::QuitGame() {
 	auto PlayerController = GetWorld()->GetFirstPlayerController();
 	UKismetSystemLibrary::QuitGame(this, PlayerController,EQuitPreference::Quit,false);
+}
+
+void UMainMenu::AddSession(const FString& SessionName) {
+	if (!SessionEntryClass || !SessionList) return;
+
+	//Creating and setting up widget
+	auto SessionWidget = CreateWidget<USessionEntry>(this, SessionEntryClass);
+	SessionWidget->SetSessionName(SessionName);
+
+	//Adding to scrollbox
+	SessionList->AddChild(SessionWidget);
 }
