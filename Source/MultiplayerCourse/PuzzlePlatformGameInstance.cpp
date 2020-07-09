@@ -7,7 +7,6 @@
 #include "UObject/ConstructorHelpers.h"
 #include "Blueprint/UserWidget.h"
 #include "MenuSystem/MenuBase.h"
-#include "OnlineSubsystem.h"
 
 UPuzzlePlatformGameInstance::UPuzzlePlatformGameInstance() {
 	static ConstructorHelpers::FClassFinder<UUserWidget> MenuMainClassBP(TEXT("/Game/MenuSystem/WBP_MainMenu"));
@@ -22,14 +21,11 @@ UPuzzlePlatformGameInstance::UPuzzlePlatformGameInstance() {
 void UPuzzlePlatformGameInstance::Init() {
 	Super::Init();
 
-	//OnlineSubsystem Interface
-	auto OSSInterface = IOnlineSubsystem::Get();
-	if (!OSSInterface) return;
-
-	auto SessionInterface = OSSInterface->GetSessionInterface();
-	if (!SessionInterface.IsValid()) return;
-
-	UE_LOG(LogTemp, Warning, TEXT("Interface name:%s and found Session Interface"), *OSSInterface->GetSubsystemName().ToString());
+	//Getting OnlineSubsystem Interface
+	OSSInterface = IOnlineSubsystem::Get();
+	//Getting SessionInterface and biding delegate
+	SessionInterface = OSSInterface->GetSessionInterface();
+	SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UPuzzlePlatformGameInstance::CreateSessionComplete);
 }
 
 void UPuzzlePlatformGameInstance::LoadMenu() {
@@ -53,12 +49,11 @@ void UPuzzlePlatformGameInstance::LoadGameMenu() {
 }
 
 void UPuzzlePlatformGameInstance::HostServer() {
-	auto Engine = GetEngine();
-	auto World = GetWorld();
-	if (!Engine || !World) return;
+	if (!SessionInterface.IsValid()) return;
 
-	Engine->AddOnScreenDebugMessage(0, 2.f, FColor::Green, TEXT("Host successful!"));
-	World->ServerTravel(TEXT("/Game/ThirdPersonCPP/Maps/ThirdPersonExampleMap?listen"));
+	//Creating a session
+	FOnlineSessionSettings OnlineSessionSettings;
+	SessionInterface->CreateSession(0, TEXT("My Game Session"), OnlineSessionSettings);
 }
 
 void UPuzzlePlatformGameInstance::JoinServer(const FString& Address) {
@@ -73,4 +68,19 @@ void UPuzzlePlatformGameInstance::JoinServer(const FString& Address) {
 void UPuzzlePlatformGameInstance::BackToMainMenu() {
 	auto PlayerController = GetFirstLocalPlayerController();
 	PlayerController->ClientTravel(TEXT("/Game/Maps/MainMenuLevel"), ETravelType::TRAVEL_Absolute);
+}
+
+void UPuzzlePlatformGameInstance::CreateSessionComplete(FName SessionName, bool bIsSuccess) {
+	if (!bIsSuccess) {
+		UE_LOG(LogTemp, Error, TEXT("Session %s could not be created!"), *SessionName.ToString());
+		return;
+	}
+
+	//Travelling to server
+	auto Engine = GetEngine();
+	auto World = GetWorld();
+	if (!Engine || !World) return;
+
+	Engine->AddOnScreenDebugMessage(0, 2.f, FColor::Green, TEXT("Host successful!"));
+	World->ServerTravel(TEXT("/Game/ThirdPersonCPP/Maps/ThirdPersonExampleMap?listen"));
 }

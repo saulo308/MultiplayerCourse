@@ -5,6 +5,11 @@
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 #include "MenuSystem/MenuInterface.h"
+
+#include "OnlineSubsystem.h"
+#include "Interfaces/OnlineSessionInterface.h"
+#include "OnlineSessionSettings.h"
+
 #include "PuzzlePlatformGameInstance.generated.h"
 
 /**
@@ -31,9 +36,17 @@ public:
 	virtual void JoinServer(const FString& Address) override;
 	UFUNCTION(Exec)
 	virtual void BackToMainMenu() override;
+
+protected:
+	void CreateSessionComplete(FName SessionName, bool bIsSuccess);
+
 protected:
 	UPROPERTY()
 	TSubclassOf<UUserWidget> MenuClass;
 	UPROPERTY()
 	TSubclassOf<UUserWidget> GameMenuClass;
+
+	//OnlineSubsystemInterfaces
+	IOnlineSubsystem* OSSInterface = nullptr;
+	IOnlineSessionPtr SessionInterface;
 };
