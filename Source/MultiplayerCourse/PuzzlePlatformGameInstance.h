@@ -40,6 +40,7 @@ public:
 protected:
 	void CreateSessionComplete(FName SessionName, bool bIsSuccess);
 	void DestroySessionComplete(FName SessionName, bool bIsSuccess);
+	void FindSessionComplete(bool bIsSuccess);
 	void CreateSession();
 
 protected:
@@ -48,7 +49,8 @@ protected:
 	UPROPERTY()
 	TSubclassOf<UUserWidget> GameMenuClass;
 
-	//OnlineSubsystemInterfaces
+	//OnlineSubsystemInterfaces and variables
 	IOnlineSubsystem* OSSInterface = nullptr;
 	IOnlineSessionPtr SessionInterface;
+	TSharedPtr<FOnlineSessionSearch> SessionSearch;
 };

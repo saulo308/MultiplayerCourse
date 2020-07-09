@@ -25,10 +25,18 @@ void UPuzzlePlatformGameInstance::Init() {
 
 	//Getting OnlineSubsystem Interface
 	OSSInterface = IOnlineSubsystem::Get();
-	//Getting SessionInterface and biding delegate
+	//Getting SessionInterface and biding delegates
 	SessionInterface = OSSInterface->GetSessionInterface();
 	SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UPuzzlePlatformGameInstance::CreateSessionComplete);
 	SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UPuzzlePlatformGameInstance::DestroySessionComplete);
+	SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UPuzzlePlatformGameInstance::FindSessionComplete);
+
+	//Finding sessions==TEMP==
+	SessionSearch = MakeShareable(new FOnlineSessionSearch());
+	if (SessionSearch.IsValid()) {
+		UE_LOG(LogTemp, Warning, TEXT("Start finding sessions!"));
+		SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
+	}
 }
 
 void UPuzzlePlatformGameInstance::LoadMenu() {
@@ -109,4 +117,13 @@ void UPuzzlePlatformGameInstance::DestroySessionComplete(FName SessionName, bool
 
 	//If we successfully destroyed existing session, then create a new one
 	CreateSession();
+}
+
+void UPuzzlePlatformGameInstance::FindSessionComplete(bool bIsSuccess) {
+	if (!bIsSuccess) {
+		UE_LOG(LogTemp, Error, TEXT("Sessions could not be found!"));
+		return;
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("Complete finding sessions!"));
 }
