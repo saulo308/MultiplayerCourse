@@ -7,6 +7,7 @@
 #include "UObject/ConstructorHelpers.h"
 #include "Blueprint/UserWidget.h"
 #include "MenuSystem/MenuBase.h"
+#include "MenuSystem/MainMenu.h"
 
 const static FName SESSION_NAME = TEXT("My Game Session");
 
@@ -30,14 +31,6 @@ void UPuzzlePlatformGameInstance::Init() {
 	SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UPuzzlePlatformGameInstance::CreateSessionComplete);
 	SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UPuzzlePlatformGameInstance::DestroySessionComplete);
 	SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UPuzzlePlatformGameInstance::FindSessionComplete);
-
-	//Finding sessions==TEMP==
-	SessionSearch = MakeShareable(new FOnlineSessionSearch());
-	if (SessionSearch.IsValid()) {
-		UE_LOG(LogTemp, Warning, TEXT("Start finding sessions!"));
-		SessionSearch->bIsLanQuery = true;
-		SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
-	}
 }
 
 void UPuzzlePlatformGameInstance::LoadMenu() {
@@ -45,7 +38,7 @@ void UPuzzlePlatformGameInstance::LoadMenu() {
 	if (!MenuClass || !PlayerController) return;
 
 	//Creating widget and adding to viewport
-	auto MenuWidget = CreateWidget<UMenuBase>(this, MenuClass);
+	MenuWidget = CreateWidget<UMainMenu>(this, MenuClass);
 	MenuWidget->SetMenuInterface(this);
 	MenuWidget->Setup();
 }
@@ -55,9 +48,9 @@ void UPuzzlePlatformGameInstance::LoadGameMenu() {
 	if (!PlayerController) return;
 
 	//Creating game menu widget
-	auto MenuWidget = CreateWidget<UMenuBase>(this, GameMenuClass);
-	MenuWidget->SetMenuInterface(this);
-	MenuWidget->Setup();
+	auto GameMenuWidget = CreateWidget<UMenuBase>(this, GameMenuClass);
+	GameMenuWidget->SetMenuInterface(this);
+	GameMenuWidget->Setup();
 }
 
 void UPuzzlePlatformGameInstance::HostServer() {
@@ -124,15 +117,29 @@ void UPuzzlePlatformGameInstance::DestroySessionComplete(FName SessionName, bool
 }
 
 void UPuzzlePlatformGameInstance::FindSessionComplete(bool bIsSuccess) {
-	if (!bIsSuccess || !SessionInterface) {
+	if (!bIsSuccess || !SessionInterface || !MenuWidget) {
 		UE_LOG(LogTemp, Error, TEXT("Sessions could not be found!"));
 		return;
 	}
 	UE_LOG(LogTemp, Warning, TEXT("Session Search complete!"));
+	//Server names storage
+	TArray<FString> ServerNames;
+
 	//Getting sessions found
 	TArray<FOnlineSessionSearchResult> SearchResults = SessionSearch->SearchResults;
-	for (const auto& Result : SearchResults) {
-		auto SessionID = Result.GetSessionIdStr();
-		UE_LOG(LogTemp, Warning, TEXT("Session name:%s"),*SessionID);
+	for (const auto Result : SearchResults)
+		ServerNames.Add(*Result.GetSessionIdStr());
+
+	//Setting Menu server list
+	MenuWidget->SetServerList(ServerNames);
+}
+
+void UPuzzlePlatformGameInstance::RequestServerListRefresh() {
+	//Finding all sessions
+	SessionSearch = MakeShareable(new FOnlineSessionSearch());
+	if (SessionSearch.IsValid()) {
+		UE_LOG(LogTemp, Warning, TEXT("Start finding sessions!"));
+		SessionSearch->bIsLanQuery = true;
+		SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
 	}
 }

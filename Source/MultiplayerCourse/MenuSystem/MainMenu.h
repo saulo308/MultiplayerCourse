@@ -19,6 +19,9 @@ class MULTIPLAYERCOURSE_API UMainMenu : public UMenuBase
 {
 	GENERATED_BODY()
 
+public:
+	void SetServerList(TArray<FString>& ServerNames);
+
 protected:
 	virtual bool Initialize() override;
 	virtual void OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld) override;
@@ -33,7 +36,8 @@ protected:
 	void OpenMainMenu();
 	UFUNCTION()
 	void QuitGame();
-	void AddSession(const FString& SessionName);
+	void RequestServerListRefresh();
+	void AddSessionEntry(const FString& SessionName);
 
 public:
 	UPROPERTY(BlueprintReadWrite, meta=(BindWidget))

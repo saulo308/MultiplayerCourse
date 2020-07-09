@@ -36,6 +36,7 @@ public:
 	virtual void JoinServer(const FString& Address) override;
 	UFUNCTION(Exec)
 	virtual void BackToMainMenu() override;
+	virtual void RequestServerListRefresh() override;
 
 protected:
 	void CreateSessionComplete(FName SessionName, bool bIsSuccess);
@@ -48,6 +49,8 @@ protected:
 	TSubclassOf<UUserWidget> MenuClass;
 	UPROPERTY()
 	TSubclassOf<UUserWidget> GameMenuClass;
+	UPROPERTY()
+	class UMainMenu* MenuWidget = nullptr;
 
 	//OnlineSubsystemInterfaces and variables
 	IOnlineSubsystem* OSSInterface = nullptr;
