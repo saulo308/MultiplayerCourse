@@ -39,6 +39,8 @@ public:
 
 protected:
 	void CreateSessionComplete(FName SessionName, bool bIsSuccess);
+	void DestroySessionComplete(FName SessionName, bool bIsSuccess);
+	void CreateSession();
 
 protected:
 	UPROPERTY()

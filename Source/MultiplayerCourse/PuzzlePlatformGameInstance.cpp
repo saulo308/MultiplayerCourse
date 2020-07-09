@@ -8,6 +8,8 @@
 #include "Blueprint/UserWidget.h"
 #include "MenuSystem/MenuBase.h"
 
+const static FName SESSION_NAME = TEXT("My Game Session");
+
 UPuzzlePlatformGameInstance::UPuzzlePlatformGameInstance() {
 	static ConstructorHelpers::FClassFinder<UUserWidget> MenuMainClassBP(TEXT("/Game/MenuSystem/WBP_MainMenu"));
 	if (MenuMainClassBP.Class) 
@@ -26,6 +28,7 @@ void UPuzzlePlatformGameInstance::Init() {
 	//Getting SessionInterface and biding delegate
 	SessionInterface = OSSInterface->GetSessionInterface();
 	SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UPuzzlePlatformGameInstance::CreateSessionComplete);
+	SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UPuzzlePlatformGameInstance::DestroySessionComplete);
 }
 
 void UPuzzlePlatformGameInstance::LoadMenu() {
@@ -51,9 +54,22 @@ void UPuzzlePlatformGameInstance::LoadGameMenu() {
 void UPuzzlePlatformGameInstance::HostServer() {
 	if (!SessionInterface.IsValid()) return;
 
+	//If there's a session openned already, destroy it
+	if (SessionInterface->GetNamedSession(SESSION_NAME)) {
+		SessionInterface->DestroySession(SESSION_NAME);
+		return;
+	}
+	
+	//If there's no existing sessiong, just create a new session
+	CreateSession();
+}
+
+void UPuzzlePlatformGameInstance::CreateSession() {
+	if (!SessionInterface.IsValid()) return;
+
 	//Creating a session
 	FOnlineSessionSettings OnlineSessionSettings;
-	SessionInterface->CreateSession(0, TEXT("My Game Session"), OnlineSessionSettings);
+	SessionInterface->CreateSession(0, SESSION_NAME, OnlineSessionSettings);
 }
 
 void UPuzzlePlatformGameInstance::JoinServer(const FString& Address) {
@@ -83,4 +99,14 @@ void UPuzzlePlatformGameInstance::CreateSessionComplete(FName SessionName, bool 
 
 	Engine->AddOnScreenDebugMessage(0, 2.f, FColor::Green, TEXT("Host successful!"));
 	World->ServerTravel(TEXT("/Game/ThirdPersonCPP/Maps/ThirdPersonExampleMap?listen"));
+}
+
+void UPuzzlePlatformGameInstance::DestroySessionComplete(FName SessionName, bool bIsSuccess) {
+	if (!bIsSuccess) {
+		UE_LOG(LogTemp, Error, TEXT("Session %s could not be destroyed!"), *SessionName.ToString());
+		return;
+	}
+
+	//If we successfully destroyed existing session, then create a new one
+	CreateSession();
 }
