@@ -29,7 +29,12 @@ void UMainMenu::HostServer() {
 
 void UMainMenu::JoinServer() {
 	if (MenuInterface) {
-		
+		if (SelectedEntryIndex.IsSet()) {
+			UE_LOG(LogTemp, Warning, TEXT("Server selected: %d"), SelectedEntryIndex.GetValue());
+		}
+		else {
+			UE_LOG(LogTemp, Warning, TEXT("Server index not yet selected!"));
+		}
 	}
 }
 
@@ -60,17 +65,23 @@ void UMainMenu::SetServerList(TArray<FString>& ServerNames) {
 	if (SessionList) SessionList->ClearChildren();
 
 	//Creating Widgets
+	uint32 i = 0;
 	for (auto ServerName : ServerNames) {
-		AddSessionEntry(ServerName);
+		AddSessionEntry(ServerName,i);
+		++i;
 	}
+	AddSessionEntry("Test1",0);
+	AddSessionEntry("Test2",1);
 }
 
-void UMainMenu::AddSessionEntry(const FString& SessionName) {
+void UMainMenu::AddSessionEntry(const FString& SessionName,uint32 EntryIndex) {
 	if (!SessionEntryClass || !SessionList) return;
 
 	//Creating and setting up widget
 	auto SessionWidget = CreateWidget<USessionEntry>(this, SessionEntryClass);
 	SessionWidget->SetSessionName(SessionName);
+	SessionWidget->Setup(EntryIndex);
+	SessionWidget->OnEntrySelected.BindUObject(this, &UMainMenu::SetSelectedEntryIndex);
 
 	//Adding to scrollbox
 	SessionList->AddChild(SessionWidget);

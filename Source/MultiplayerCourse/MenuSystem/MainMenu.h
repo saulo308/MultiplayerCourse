@@ -21,6 +21,7 @@ class MULTIPLAYERCOURSE_API UMainMenu : public UMenuBase
 
 public:
 	void SetServerList(TArray<FString>& ServerNames);
+	FORCEINLINE void SetSelectedEntryIndex(uint32 NewIndex) { SelectedEntryIndex = NewIndex; }
 
 protected:
 	virtual bool Initialize() override;
@@ -37,7 +38,7 @@ protected:
 	UFUNCTION()
 	void QuitGame();
 	void RequestServerListRefresh();
-	void AddSessionEntry(const FString& SessionName);
+	void AddSessionEntry(const FString& SessionName, uint32 EntryIndex);
 
 public:
 	UPROPERTY(BlueprintReadWrite, meta=(BindWidget))
@@ -66,4 +67,6 @@ public:
 	//SessionEntry
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TSubclassOf<USessionEntry> SessionEntryClass;
+protected:
+	TOptional<uint32> SelectedEntryIndex;
 };
