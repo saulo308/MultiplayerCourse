@@ -21,6 +21,9 @@ class MULTIPLAYERCOURSE_API USessionEntry : public UUserWidget
 public:
 	void Setup(uint32 EntryIndex);
 	void SetSessionName(const FString& Name);
+	void SetHostName(const FString& Name);
+	void SetSlots(uint16 CurrentNum, uint16 MaxNum);
+
 	UFUNCTION()
 	void OnEntryClicked();
 	FORCEINLINE void SetIsSelected(bool Selected) { bIsSelected = Selected; }
@@ -32,6 +35,10 @@ public:
 protected:
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* SessionName;
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* HostName;
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* Slots;
 	UPROPERTY(meta = (BindWidget))
 	UButton* BtnEntry;
 

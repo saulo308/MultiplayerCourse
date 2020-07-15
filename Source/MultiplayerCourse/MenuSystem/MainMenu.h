@@ -11,6 +11,17 @@
 #include "SessionEntry.h"
 #include "MainMenu.generated.h"
 
+USTRUCT()
+struct FServerData {
+	GENERATED_BODY()
+
+public:
+	FString ServerName;
+	FString HostName;
+	uint16 CurConnectedPlayerNum;
+	uint16 MaxConnectedPlayerNum;
+};
+
 /**
  * 
  */
@@ -20,7 +31,7 @@ class MULTIPLAYERCOURSE_API UMainMenu : public UMenuBase
 	GENERATED_BODY()
 
 public:
-	void SetServerList(TArray<FString>& ServerNames);
+	void SetServerList(TArray<FServerData>& InServersData);
 	void SetSelectedEntryIndex(uint32 NewIndex);
 	void UpdateEntries(uint32 NewIndex);
 
@@ -39,7 +50,7 @@ protected:
 	UFUNCTION()
 	void QuitGame();
 	void RequestServerListRefresh();
-	void AddSessionEntry(const FString& SessionName, uint32 EntryIndex);
+	void AddSessionEntry(const FServerData& ServerData, uint32 EntryIndex);
 
 public:
 	UPROPERTY(BlueprintReadWrite, meta=(BindWidget))

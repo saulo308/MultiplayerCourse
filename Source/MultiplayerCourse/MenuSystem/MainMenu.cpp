@@ -62,24 +62,30 @@ void UMainMenu::RequestServerListRefresh() {
 	MenuInterface->RequestServerListRefresh();
 }
 
-void UMainMenu::SetServerList(TArray<FString>& ServerNames) {
+void UMainMenu::SetServerList(TArray<FServerData>& InServersData) {
 	//Clearing all entris
 	if (SessionList) SessionList->ClearChildren();
 
 	//Creating Widgets
 	uint32 i = 0;
-	for (auto ServerName : ServerNames) {
-		AddSessionEntry(ServerName,i);
+	for (auto ServerData : InServersData) {
+		AddSessionEntry(ServerData,i);
 		++i;
 	}
 }
 
-void UMainMenu::AddSessionEntry(const FString& SessionName,uint32 EntryIndex) {
+void UMainMenu::AddSessionEntry(const FServerData& ServerData,uint32 EntryIndex) {
 	if (!SessionEntryClass || !SessionList) return;
 
 	//Creating and setting up widget
 	auto SessionWidget = CreateWidget<USessionEntry>(this, SessionEntryClass);
-	SessionWidget->SetSessionName(SessionName);
+
+	//Setting info
+	SessionWidget->SetSessionName(ServerData.ServerName);
+	SessionWidget->SetHostName(ServerData.HostName);
+	SessionWidget->SetSlots(ServerData.CurConnectedPlayerNum,ServerData.MaxConnectedPlayerNum);
+
+	//Setup
 	SessionWidget->Setup(EntryIndex);
 	SessionWidget->OnEntrySelected.BindUObject(this, &UMainMenu::SetSelectedEntryIndex);
 
