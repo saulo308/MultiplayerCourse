@@ -126,6 +126,9 @@ void UPuzzlePlatformGameInstance::FindSessionComplete(bool bIsSuccess) {
 	TArray<FString> ServerNames;
 
 	//Getting sessions found
+	ServerNames.Add("Test Server 1");
+	ServerNames.Add("Test Server 2");
+	ServerNames.Add("Test Server 3");
 	TArray<FOnlineSessionSearchResult> SearchResults = SessionSearch->SearchResults;
 	for (const auto Result : SearchResults)
 		ServerNames.Add(*Result.GetSessionIdStr());
@@ -154,7 +157,7 @@ void UPuzzlePlatformGameInstance::JoinSessionComplete(FName SessionName, EOnJoin
 
 	//Getting resolved string to connect
 	FString ConnectInfo;
-	bool bCanJoin = SessionInterface->GetResolvedConnectString(SessionName, ConnectInfo,NAME_GamePort);
+	bool bCanJoin = SessionInterface->GetResolvedConnectString(SessionName, ConnectInfo);
 	if (!bCanJoin) return;
 
 	//Connecting player

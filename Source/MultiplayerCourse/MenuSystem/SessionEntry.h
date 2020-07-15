@@ -23,6 +23,8 @@ public:
 	void SetSessionName(const FString& Name);
 	UFUNCTION()
 	void OnEntryClicked();
+	FORCEINLINE void SetIsSelected(bool Selected) { bIsSelected = Selected; }
+	FORCEINLINE uint32 GetEntryIndex() { return CurrentEntryIndex;  }
 
 public:
 	OnEntrySelectedDelegate OnEntrySelected;
@@ -32,6 +34,9 @@ protected:
 	UTextBlock* SessionName;
 	UPROPERTY(meta = (BindWidget))
 	UButton* BtnEntry;
+
+	UPROPERTY(BlueprintReadOnly)
+	bool bIsSelected = false;
 
 private:
 	uint32 CurrentEntryIndex;

@@ -86,3 +86,22 @@ void UMainMenu::AddSessionEntry(const FString& SessionName,uint32 EntryIndex) {
 	//Adding to scrollbox
 	SessionList->AddChild(SessionWidget);
 }
+
+void UMainMenu::SetSelectedEntryIndex(uint32 NewIndex){ 
+	SelectedEntryIndex = NewIndex;
+	UpdateEntries(NewIndex);
+}
+
+void UMainMenu::UpdateEntries(uint32 NewIndex) {
+	auto Children = SessionList->GetAllChildren();
+	for (auto Child : Children) {
+		USessionEntry* Entry = Cast<USessionEntry>(Child);
+		if (!Entry) continue;
+
+		if (Entry->GetEntryIndex() == NewIndex) {
+			Entry->SetIsSelected(true);
+		}else {
+			Entry->SetIsSelected(false);
+		}
+	}
+}

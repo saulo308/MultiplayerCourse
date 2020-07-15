@@ -21,7 +21,8 @@ class MULTIPLAYERCOURSE_API UMainMenu : public UMenuBase
 
 public:
 	void SetServerList(TArray<FString>& ServerNames);
-	FORCEINLINE void SetSelectedEntryIndex(uint32 NewIndex) { SelectedEntryIndex = NewIndex; }
+	void SetSelectedEntryIndex(uint32 NewIndex);
+	void UpdateEntries(uint32 NewIndex);
 
 protected:
 	virtual bool Initialize() override;
