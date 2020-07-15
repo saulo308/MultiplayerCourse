@@ -31,6 +31,7 @@ void UPuzzlePlatformGameInstance::Init() {
 	SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UPuzzlePlatformGameInstance::CreateSessionComplete);
 	SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UPuzzlePlatformGameInstance::DestroySessionComplete);
 	SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UPuzzlePlatformGameInstance::FindSessionComplete);
+	SessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &UPuzzlePlatformGameInstance::JoinSessionComplete);
 }
 
 void UPuzzlePlatformGameInstance::LoadMenu() {
@@ -77,13 +78,9 @@ void UPuzzlePlatformGameInstance::CreateSession() {
 	SessionInterface->CreateSession(0, SESSION_NAME, OnlineSessionSettings);
 }
 
-void UPuzzlePlatformGameInstance::JoinServer(const FString& Address) {
-	auto Engine = GetEngine();
-	auto PlayerController = GetFirstLocalPlayerController();
-	if (!Engine || !PlayerController) return;
-
-	Engine->AddOnScreenDebugMessage(0, 2.f, FColor::Green, FString::Printf(TEXT("Joining %s"), *Address));
-	PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
+void UPuzzlePlatformGameInstance::JoinServer(uint32 ServerIndex) {
+	if (!SessionInterface || !SessionSearch) return;
+	SessionInterface->JoinSession(0, SESSION_NAME, SessionSearch->SearchResults[ServerIndex]);
 }
 
 void UPuzzlePlatformGameInstance::BackToMainMenu() {
@@ -142,4 +139,20 @@ void UPuzzlePlatformGameInstance::RequestServerListRefresh() {
 		SessionSearch->bIsLanQuery = true;
 		SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
 	}
+}
+
+void UPuzzlePlatformGameInstance::JoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result) {
+	if (!Result == EOnJoinSessionCompleteResult::Success) return;
+	auto Engine = GetEngine();
+	auto PlayerController = GetFirstLocalPlayerController();
+	if (!Engine || !PlayerController) return;
+
+	//Getting resolved string to connect
+	FString ConnectInfo;
+	bool bCanJoin = SessionInterface->GetResolvedConnectString(SessionName, ConnectInfo,NAME_GamePort);
+	if (!bCanJoin) return;
+
+	//Connecting player
+	Engine->AddOnScreenDebugMessage(0, 2.f, FColor::Green, FString::Printf(TEXT("Joining")));
+	PlayerController->ClientTravel(ConnectInfo, ETravelType::TRAVEL_Absolute);
 }

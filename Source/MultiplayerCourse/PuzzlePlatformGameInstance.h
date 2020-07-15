@@ -33,12 +33,13 @@ public:
 	UFUNCTION(Exec)
 	virtual void HostServer() override;
 	UFUNCTION(Exec)
-	virtual void JoinServer(const FString& Address) override;
+	virtual void JoinServer(uint32 ServerIndex) override;
 	UFUNCTION(Exec)
 	virtual void BackToMainMenu() override;
 	virtual void RequestServerListRefresh() override;
 
 protected:
+	void JoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
 	void CreateSessionComplete(FName SessionName, bool bIsSuccess);
 	void DestroySessionComplete(FName SessionName, bool bIsSuccess);
 	void FindSessionComplete(bool bIsSuccess);

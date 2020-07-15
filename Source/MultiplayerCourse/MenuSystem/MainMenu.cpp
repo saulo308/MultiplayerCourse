@@ -28,13 +28,15 @@ void UMainMenu::HostServer() {
 }
 
 void UMainMenu::JoinServer() {
-	if (MenuInterface) {
-		if (SelectedEntryIndex.IsSet()) {
-			UE_LOG(LogTemp, Warning, TEXT("Server selected: %d"), SelectedEntryIndex.GetValue());
-		}
-		else {
-			UE_LOG(LogTemp, Warning, TEXT("Server index not yet selected!"));
-		}
+	if (!MenuInterface) return;
+
+	//Joining server on SelectedEntryIndex
+	if (SelectedEntryIndex.IsSet()) {
+		UE_LOG(LogTemp, Warning, TEXT("Server selected: %d"), SelectedEntryIndex.GetValue());
+		MenuInterface->JoinServer(SelectedEntryIndex.GetValue());
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("Server index not yet selected!"));
 	}
 }
 
@@ -70,8 +72,6 @@ void UMainMenu::SetServerList(TArray<FString>& ServerNames) {
 		AddSessionEntry(ServerName,i);
 		++i;
 	}
-	AddSessionEntry("Test1",0);
-	AddSessionEntry("Test2",1);
 }
 
 void UMainMenu::AddSessionEntry(const FString& SessionName,uint32 EntryIndex) {

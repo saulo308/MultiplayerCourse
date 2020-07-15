@@ -23,7 +23,7 @@ class MULTIPLAYERCOURSE_API IMenuInterface
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	virtual void HostServer() = 0;
-	virtual void JoinServer(const FString& Address) = 0;
+	virtual void JoinServer(uint32 ServerIndex) = 0;
 	virtual void BackToMainMenu() = 0;
 	virtual void RequestServerListRefresh() = 0;
 };
