@@ -32,6 +32,8 @@ void UPuzzlePlatformGameInstance::Init() {
 	SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &UPuzzlePlatformGameInstance::DestroySessionComplete);
 	SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UPuzzlePlatformGameInstance::FindSessionComplete);
 	SessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &UPuzzlePlatformGameInstance::JoinSessionComplete);
+
+	UE_LOG(LogTemp, Warning, TEXT("Found substystem:%s"), *OSSInterface->GetSubsystemName().ToString());
 }
 
 void UPuzzlePlatformGameInstance::LoadMenu() {
