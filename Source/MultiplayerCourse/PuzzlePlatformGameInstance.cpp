@@ -106,7 +106,7 @@ void UPuzzlePlatformGameInstance::CreateSessionComplete(FName SessionName, bool 
 	if (!Engine || !World) return;
 
 	Engine->AddOnScreenDebugMessage(0, 2.f, FColor::Green, TEXT("Host successful!"));
-	World->ServerTravel(TEXT("/Game/ThirdPersonCPP/Maps/ThirdPersonExampleMap?listen"));
+	World->ServerTravel(TEXT("/Game/Maps/Lobby?listen"));
 }
 
 void UPuzzlePlatformGameInstance::DestroySessionComplete(FName SessionName, bool bIsSuccess) {
