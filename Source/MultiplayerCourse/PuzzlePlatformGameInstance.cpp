@@ -9,7 +9,7 @@
 #include "MenuSystem/MenuBase.h"
 #include "MenuSystem/MainMenu.h"
 
-const static FName SESSION_NAME = TEXT("My Game Session");
+const static FName SESSION_NAME = TEXT("Game");
 const static FName SERVER_NAME_SETTINGS_KEY = TEXT("ServerName");
 
 UPuzzlePlatformGameInstance::UPuzzlePlatformGameInstance() {
