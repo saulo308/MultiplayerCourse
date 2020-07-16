@@ -9,8 +9,10 @@ bool UMainMenu::Initialize() {
 
 	if (!BtnHost || !BtnJoinMenu || !BtnBackMenu || !BtnJoin || !BtnQuitGame) return false;
 	BtnHost->OnClicked.AddDynamic(this, &UMainMenu::HostServer);
+	BtnHostMenu->OnClicked.AddDynamic(this, &UMainMenu::OpenHostMenu);
 	BtnJoinMenu->OnClicked.AddDynamic(this, &UMainMenu::OpenJoinMenu);
 	BtnBackMenu->OnClicked.AddDynamic(this, &UMainMenu::OpenMainMenu);
+	BtnCancel->OnClicked.AddDynamic(this, &UMainMenu::OpenMainMenu);
 	BtnJoin->OnClicked.AddDynamic(this, &UMainMenu::JoinServer);
 	BtnQuitGame->OnClicked.AddDynamic(this, &UMainMenu::QuitGame);
 
@@ -23,7 +25,7 @@ void UMainMenu::OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld){
 
 void UMainMenu::HostServer() {
 	if (MenuInterface) {
-		MenuInterface->HostServer();
+		MenuInterface->HostServer(SessionNameText->GetText().ToString());
 	}
 }
 
@@ -44,6 +46,11 @@ void UMainMenu::OpenJoinMenu() {
 	if (!MenuSwitcher || !JoinMenu) return;
 	MenuSwitcher->SetActiveWidget(JoinMenu);
 	RequestServerListRefresh();
+}
+
+void UMainMenu::OpenHostMenu() {
+	if (!MenuSwitcher || !JoinMenu) return;
+	MenuSwitcher->SetActiveWidget(HostMenu);
 }
 
 void UMainMenu::OpenMainMenu() {

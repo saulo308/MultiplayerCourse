@@ -31,7 +31,7 @@ public:
 	void LoadGameMenu();
 
 	UFUNCTION(Exec)
-	virtual void HostServer() override;
+	virtual void HostServer(const FString& ServerName) override;
 	UFUNCTION(Exec)
 	virtual void JoinServer(uint32 ServerIndex) override;
 	UFUNCTION(Exec)
@@ -57,4 +57,6 @@ protected:
 	IOnlineSubsystem* OSSInterface = nullptr;
 	IOnlineSessionPtr SessionInterface;
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;
+	//Session Creation Settings
+	FString ServerCreationName;
 };

@@ -10,6 +10,7 @@
 #include "MenuSystem/MainMenu.h"
 
 const static FName SESSION_NAME = TEXT("My Game Session");
+const static FName SERVER_NAME_SETTINGS_KEY = TEXT("ServerName");
 
 UPuzzlePlatformGameInstance::UPuzzlePlatformGameInstance() {
 	static ConstructorHelpers::FClassFinder<UUserWidget> MenuMainClassBP(TEXT("/Game/MenuSystem/WBP_MainMenu"));
@@ -56,8 +57,9 @@ void UPuzzlePlatformGameInstance::LoadGameMenu() {
 	GameMenuWidget->Setup();
 }
 
-void UPuzzlePlatformGameInstance::HostServer() {
+void UPuzzlePlatformGameInstance::HostServer(const FString& ServerName) {
 	if (!SessionInterface.IsValid()) return;
+	ServerCreationName = ServerName;
 
 	//If there's a session openned already, destroy it
 	if (SessionInterface->GetNamedSession(SESSION_NAME)) {
@@ -78,6 +80,7 @@ void UPuzzlePlatformGameInstance::CreateSession() {
 	OnlineSessionSettings.NumPublicConnections = 2;
 	OnlineSessionSettings.bShouldAdvertise = true;
 	OnlineSessionSettings.bUsesPresence = true;
+	OnlineSessionSettings.Set(SERVER_NAME_SETTINGS_KEY, ServerCreationName, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 	SessionInterface->CreateSession(0, SESSION_NAME, OnlineSessionSettings);
 }
 
@@ -139,7 +142,8 @@ void UPuzzlePlatformGameInstance::FindSessionComplete(bool bIsSuccess) {
 
 		//Creating new ServerData
 		FServerData NewServerData;
-		NewServerData.ServerName = Result.GetSessionIdStr();
+		FString ServerName;
+		NewServerData.ServerName = (SessionInfo.SessionSettings.Get(SERVER_NAME_SETTINGS_KEY, ServerName)) ? ServerName : "Undefined Session";
 		NewServerData.HostName = SessionInfo.OwningUserName;
 		NewServerData.MaxConnectedPlayerNum = SessionInfo.SessionSettings.NumPublicConnections;
 		NewServerData.CurConnectedPlayerNum = NewServerData.MaxConnectedPlayerNum - SessionInfo.NumOpenPublicConnections;

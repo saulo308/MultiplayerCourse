@@ -48,6 +48,8 @@ protected:
 	UFUNCTION()
 	void OpenMainMenu();
 	UFUNCTION()
+	void OpenHostMenu();
+	UFUNCTION()
 	void QuitGame();
 	void RequestServerListRefresh();
 	void AddSessionEntry(const FServerData& ServerData, uint32 EntryIndex);
@@ -56,6 +58,8 @@ public:
 	UPROPERTY(BlueprintReadWrite, meta=(BindWidget))
 	UButton* BtnHost;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	UButton* BtnHostMenu;
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	UButton* BtnJoinMenu;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	UButton* BtnJoin;
@@ -63,6 +67,8 @@ public:
 	UButton* BtnBackMenu;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	UButton* BtnQuitGame;
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	UButton* BtnCancel;
 
 	//Menus
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
@@ -71,8 +77,12 @@ public:
 	class UWidget* MainMenu;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UWidget* JoinMenu;
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	class UWidget* HostMenu;
 
-	//IPField
+	//Menus
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	UEditableTextBox* SessionNameText;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	UScrollBox* SessionList;
 
