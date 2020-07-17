@@ -18,6 +18,7 @@ public:
 	FORCEINLINE uint16 GetConnectedPlayerNum() { return ConnectedPlayerNum; }
 
 	virtual void PostLogin(APlayerController* NewPlayer) override;
+	void StartSession();
 	virtual void Logout(AController* Exiting) override;
 	
 private:

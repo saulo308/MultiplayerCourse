@@ -37,6 +37,7 @@ public:
 	UFUNCTION(Exec)
 	virtual void BackToMainMenu() override;
 	virtual void RequestServerListRefresh() override;
+	void StartSession();
 
 protected:
 	void JoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result);

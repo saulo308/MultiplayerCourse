@@ -2,27 +2,33 @@
 
 
 #include "LobbyGameMode.h"
+#include "PuzzlePlatformGameInstance.h"
 
 void ALobbyGameMode::PostLogin(APlayerController* NewPlayer) {
 	Super::PostLogin(NewPlayer);
-	UE_LOG(LogTemp, Warning, TEXT("Welcome new player!"));
 	++ConnectedPlayerNum;
 
 	if (ConnectedPlayerNum >= 2) {
-		UE_LOG(LogTemp, Warning, TEXT("Has reached top player num!!!!"));
-
-		//Seamless travel
-		bUseSeamlessTravel = true;
-
-		//Travelling
+		UE_LOG(LogTemp, Warning, TEXT("Game will start in 10 seconds!!!!"));
 		auto World = GetWorld();
 		if (!World) return;
-		World->ServerTravel(TEXT("/Game/ThirdPersonCPP/Maps/ThirdPersonExampleMap?listen"));
+
+		FTimerHandle TimerHandle;
+		World->GetTimerManager().SetTimer(TimerHandle,this,&ALobbyGameMode::StartSession,10.f,false);
 	}
+}
+
+void ALobbyGameMode::StartSession() {
+	auto GameInstance = Cast<UPuzzlePlatformGameInstance>(GetGameInstance());
+	if (!GameInstance) return;
+
+	//Seamless travel flag
+	bUseSeamlessTravel = true;
+	//Starting Session
+	GameInstance->StartSession();
 }
 
 void ALobbyGameMode::Logout(AController* Exiting) {
 	Super::Logout(Exiting);
-	UE_LOG(LogTemp, Warning, TEXT("Bye bye!"));
 	--ConnectedPlayerNum;
 }

@@ -9,7 +9,7 @@
 #include "MenuSystem/MenuBase.h"
 #include "MenuSystem/MainMenu.h"
 
-const static FName SESSION_NAME = TEXT("Game");
+const static FName SESSION_NAME = NAME_GameSession;
 const static FName SERVER_NAME_SETTINGS_KEY = TEXT("ServerName");
 
 UPuzzlePlatformGameInstance::UPuzzlePlatformGameInstance() {
@@ -182,4 +182,11 @@ void UPuzzlePlatformGameInstance::JoinSessionComplete(FName SessionName, EOnJoin
 	//Connecting player
 	Engine->AddOnScreenDebugMessage(0, 2.f, FColor::Green, FString::Printf(TEXT("Joining")));
 	PlayerController->ClientTravel(ConnectInfo, ETravelType::TRAVEL_Absolute);
+}
+
+void UPuzzlePlatformGameInstance::StartSession() {
+	//Travelling
+	GetWorld()->ServerTravel(TEXT("/Game/ThirdPersonCPP/Maps/ThirdPersonExampleMap?listen"));
+	if(SessionInterface)
+		SessionInterface->StartSession(SESSION_NAME);
 }
